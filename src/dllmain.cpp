@@ -8,10 +8,10 @@
 
 using namespace RC::Unreal;
 
-class Optimizer final : public CppUserModBase
+class SmutaWallDestroyer final : public CppUserModBase
 {
 public:
-    Optimizer()
+    SmutaWallDestroyer()
     {
         ModName = STR("Smuta wall destroyer");
         ModVersion = STR("1.0");
@@ -47,7 +47,7 @@ extern "C"
 {
 MY_AWESOME_MOD_API RC::CppUserModBase* start_mod()
 {
-    return new Optimizer();
+    return new SmutaWallDestroyer();
 }
 
 MY_AWESOME_MOD_API void uninstall_mod(RC::CppUserModBase* mod)
