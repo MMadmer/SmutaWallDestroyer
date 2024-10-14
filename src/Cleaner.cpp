@@ -15,6 +15,12 @@ void Replacer::ClearHiddenWalls()
     // Find target classes
     UClass* MeshActorClass = Unreal::UObjectGlobals::StaticFindObject<UClass*>(nullptr, nullptr, STR("/Script/Engine.StaticMeshActor"));
     UClass* MeshCompClass = Unreal::UObjectGlobals::StaticFindObject<UClass*>(nullptr, nullptr, STR("/Script/Engine.StaticMeshComponent"));
+    const UObject* DefaultMat = Unreal::UObjectGlobals::StaticFindObject<UObject*>(nullptr,
+                                                                                   nullptr,
+                                                                                   STR("/Engine/EngineMaterials/DefaultMaterial.DefaultMaterial"));
+    const UObject* BasicShapeMat = Unreal::UObjectGlobals::StaticFindObject<UObject*>(nullptr,
+                                                                                      nullptr,
+                                                                                      STR("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"));
 
     // Find any actor
     const UObject* ContextActor = Unreal::UObjectGlobals::FindFirstOf(STR("Actor"));
@@ -34,10 +40,10 @@ void Replacer::ClearHiddenWalls()
         if (!MeshComponents.IsValidIndex(0)) continue;
 
         // Find and destroy invisible walls
-        FIsVisible IsVisibleArgs{};
-        UFunctionUtils::TryCallUFunction(MeshComponents[0], STR("IsVisible"), &IsVisibleArgs);
+        FGetMaterial GetMaterialArgs{};
+        UFunctionUtils::TryCallUFunction(MeshComponents[0], STR("GetMaterial"), &GetMaterialArgs);
 
-        if (!IsVisibleArgs.ReturnValue || static_cast<bool>(*MeshActor->GetValuePtrByPropertyNameInChain<uint8>(STR("bHidden"))))
+        if (GetMaterialArgs.ReturnValue == DefaultMat || GetMaterialArgs.ReturnValue == BasicShapeMat)
         {
             MeshActor->K2_DestroyActor();
             InvisibleWalls++;

@@ -50,6 +50,13 @@ struct FSetWorldScale3D
     Unreal::FVector NewScale;
 };
 
+/** virtual class UMaterialInterface* GetMaterial(int32 ElementIndex) const*/
+struct FGetMaterial
+{
+    Unreal::int32 ElementIndex;
+    UObject* ReturnValue{};
+};
+
 /** virtual TArray<class UMaterialInterface*> GetMaterials() const*/
 struct FGetMaterials
 {
